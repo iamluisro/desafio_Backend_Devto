@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllWriters, createNewWriter, getWriter } = require('../useCases/writers');
+const { getAllWriters, createNewWriter, getWriter } = require('../../useCases/writers');
 
 router.get('/', async (request, response) => {
   try {
