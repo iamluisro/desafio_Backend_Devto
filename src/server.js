@@ -4,8 +4,10 @@ const express = require("express");
 const postRouter = require("./routers/api/posts");
 const writerRouter = require("./routers/api/writers");
 
+
 const server = express();
 //middlewares
+server.use(cors())
 server.use(express.json())
 
 //rourters
