@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 
 //Fata el router
 const postRouter = require("./routers/api/posts");
