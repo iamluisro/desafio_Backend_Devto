@@ -33,6 +33,16 @@ const writerSchema = new mongoose.Schema({
     maxlength: 300,
     trim: true,
   },
+  email: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 300,
+    trim: true,
+  },
+  _id: {
+    type: mongoose.ObjectId,
+  }
 });
 
 const model = mongoose.model("writers", writerSchema);
