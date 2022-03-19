@@ -22,12 +22,19 @@ const postSchema = new mongoose.Schema({
     trim: true,
   },
   //writer: [{body:"string", by: mongoose.Schema.Types.ObjectId}],
-  writer: { type: Schema.Types.ObjectId, ref: "writers" },
+  writer: { type: mongoose.Schema.Types.ObjectId, ref: "writers" },
   //revisar como se agrega la fecha
-  date: {
+  dateCreated: {
     type: Date,
     required: true,
   },
+  image: {
+    type: String,
+    required: false
+  },
+  _id: {
+    type: mongoose.ObjectId,
+  }
 });
 
 const model = mongoose.model("posts", postSchema);
