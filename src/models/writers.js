@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const writerSchema = new mongoose.Schema({
   name: {
@@ -22,10 +22,6 @@ const writerSchema = new mongoose.Schema({
     maxlength: 50,
     trim: true,
   },
-  dateCreated: {
-    type: Date,
-    required: true,
-  },
   biography: {
     type: String,
     required: true,
@@ -33,18 +29,27 @@ const writerSchema = new mongoose.Schema({
     maxlength: 300,
     trim: true,
   },
+  // post: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'posts',
+  // },
   email: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 300,
-    trim: true,
+    match: /.+@.+\..+/,
   },
-  _id: {
-    type: mongoose.ObjectId,
-  }
+  password: {
+    type: String,
+    required: true,
+  },
+  dateCreated: {
+    type: Date,
+    required: true,
+  },
+  // _id: {
+  //   type: mongoose.ObjectId,
+  // },
 });
 
-const model = mongoose.model("writers", writerSchema);
-
+const model = mongoose.model('writers', writerSchema);
 module.exports = model;
