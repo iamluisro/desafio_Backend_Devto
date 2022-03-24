@@ -2,7 +2,19 @@ const { default: mongoose } = require("mongoose");
 const Post = require("../models/posts");
 const Writer = require("../models/writers")
 function getAllPost() {
-  return Post.find({});
+  return Post.aggregate([
+    {
+      $match: {}
+    },
+    {
+      $lookup: {
+        from: "writers",        //must be collection name for posts
+        localField: "writer",
+        foreignField: "_id",
+        as: "writer"
+      }
+    }
+  ]);
 }
 
 function patchPostById(idPost, dataToUpdate) {
