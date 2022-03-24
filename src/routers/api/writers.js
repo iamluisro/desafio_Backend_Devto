@@ -6,7 +6,9 @@ const {
   getWriter,
   signUp,
   login,
+  getWriterByUsername
 } = require('../../useCases/writers');
+const { getPost } = require('../../useCases/posts')
 const auth = require('../../middlewares/auth');
 
 router.get('/', async (request, response) => {
@@ -72,15 +74,45 @@ router.post('/login', async (request, response) => {
 
 router.use(auth);
 
-router.get('/:_id', async (request, response) => {
+router.get('/:username', async (request, response) => {
   try {
-    const writerId = request.params._id;
-    const writer = await getWriter(writerId);
+    const writerId = request.params.username;
+    const writer = await getWriterByUsername(writerId);
     if (writer) {
       response.json({
         success: true,
         message: 'Writer found',
         data: writer,
+      });
+    } else {
+      response.status(404).end(
+        response.json({
+          success: true,
+          message: 'Writer not found',
+        })
+      );
+    }
+  } catch (error) {
+    response.status(400);
+    response.json({
+      success: false,
+      message: 'Error getting writer',
+      error: error.message,
+    });
+  }
+});
+
+router.get('/:username/:postId', async (request, response) => {
+  try {
+    const writerId = request.params.username;
+    const postId = request.params.postId;
+    const writer = await getWriterByUsername(writerId);
+    const post = await getPost(postId)
+    if (writer) {
+      response.json({
+        success: true,
+        message: 'Post found',
+        data: post,
       });
     } else {
       response.status(404).end(

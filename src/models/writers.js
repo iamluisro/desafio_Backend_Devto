@@ -29,10 +29,17 @@ const writerSchema = new mongoose.Schema({
     maxlength: 300,
     trim: true,
   },
-  // post: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'posts',
-  // },
+  username: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 300,
+    trim: true,
+  },
+  posts: [{
+    type : mongoose.Schema.Types.ObjectId,
+    ref: 'posts',
+  }],
   email: {
     type: String,
     required: true,

@@ -1,6 +1,7 @@
 const Writer = require('../models/writers');
 const bcrypt = require('../lib/bcrypt');
 const jwt = require('../lib/jwt');
+const ObjectId = require("mongoose").Types.ObjectId;
 
 function getAllWriters() {
   return Writer.find({});
@@ -8,6 +9,25 @@ function getAllWriters() {
 
 function getWriter(writerId) {
   return Writer.findById(writerId).exec();
+}
+
+function getWriterByUsername(writerUsername) {
+  return Writer.aggregate([
+    {
+      $match: {
+        username: writerUsername
+      }
+    },
+    {
+      $lookup: {
+        from: "posts",        //must be collection name for posts
+        localField: "posts",
+        foreignField: "_id",
+        as: "posts"
+      }
+    }
+  ]);
+  // return Writer.findOne({ username: writerUsername });
 }
 
 function createNewWriter(newWriter) {
@@ -29,18 +49,12 @@ async function signUp(dataWriter) {
     biography,
     nationality,
     dateCreated,
+    username
   } = dataWriter;
-  console.log(
-    '🚀 ~ file: writers.js ~ line 26 ~ signUp ~ dataWriter',
-    dataWriter
-  );
-  const writerFound = await Writer.findOne({ email });
-  console.log(
-    '🚀 ~ file: writers.js ~ line 28 ~ signUp ~ writerFound',
-    writerFound
-  );
+  const writerFoundByEmail = await Writer.findOne({ email });
+  const writerFoundByUsername = await Writer.findOne({ username });
 
-  if (writerFound) throw new Error('Writer already exists');
+  if (writerFoundByEmail || writerFoundByUsername) throw new Error('Writer already exists');
   const passwordEncrypted = await bcrypt.hash(password);
 
   return Writer.create({
@@ -51,23 +65,22 @@ async function signUp(dataWriter) {
     biography,
     nationality,
     dateCreated,
+    username
   });
 }
 
 async function login(email, password) {
   const writerFound = await Writer.findOne({ email });
-  // console.log("🚀 ~ file: writers.js ~ line 46 ~ login ~ writerFound", writerFound)
   if (!writerFound) throw new Error('Invalid credentials');
 
   const isValidPassword = await bcrypt.compare(password, writerFound.password);
-  // console.log("🚀 ~ file: writers.js ~ line 50 ~ login ~ isValidPassword", isValidPassword)
   if (!isValidPassword) throw new Error('Invalid credentials');
 
   // regresar
   const token = jwt.sign({
-    _id: '623c06c614612c5ebdc7ad1f',
-    name: 'Luis Fco',
-    lastName: 'Rodriguez',
+    _id: writerFound._id,
+    name: writerFound.name,
+    lastName: writerFound.lastName,
     role: 'writer',
   });
   return token;
@@ -81,4 +94,5 @@ module.exports = {
   deleteById,
   signUp,
   login,
+  getWriterByUsername
 };
