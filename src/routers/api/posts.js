@@ -52,7 +52,6 @@ router.get('/:_id', async (request, response) => {
 router.post('/', async (request, response) => {
   try {
     const post = request.body;
-    console.log('🚀 ~ file: posts.js ~ line 27 ~ router.post ~ post', post);
     const resp = await createNewPost(post).save();
 
     response.json({
