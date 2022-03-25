@@ -44,7 +44,7 @@ router.post('/signup', async (request, response) => {
     response.status(400);
     response.json({
       success: false,
-      message: ' could not register',
+      message: 'could not register',
       error: error.message,
     });
   }
