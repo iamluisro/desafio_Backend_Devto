@@ -80,10 +80,11 @@ async function login(email, password) {
   const token = jwt.sign({
     _id: writerFound._id,
     name: writerFound.name,
+    username: writerFound.username,
     lastName: writerFound.lastName,
     role: 'writer',
   });
-  return token;
+  return {token, username: writerFound.username};
 }
 
 module.exports = {

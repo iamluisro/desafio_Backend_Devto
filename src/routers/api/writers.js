@@ -58,9 +58,7 @@ router.post('/login', async (request, response) => {
     response.json({
       success: true,
       message: ' writer logged in',
-      data: {
-        token,
-      },
+      data: token
     });
   } catch (error) {
     response.status(400);
@@ -72,7 +70,7 @@ router.post('/login', async (request, response) => {
   }
 });
 
-router.use(auth);
+// router.use(auth);
 
 router.get('/:username', async (request, response) => {
   try {
